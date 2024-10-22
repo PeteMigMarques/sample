@@ -1,0 +1,29 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+# Optional: A simple script to verify the pipeline starts correctly
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+# Build and publish the .NET Core web project (customize for your environment if needed)
+
+# Deploy to Azure Web App
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'MCAPS-Support-REQ-75538-2024-pedromarques(b47f4b5c-a872-40c6-a011-01865fe9dd49)'
+    appType: 'webApp'
+    appName: 'petedotnetwin'
+    deployToSlotOrASE: true
+    resourceGroupName: 'pete_apps_win'
+    slotName: 'test'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip' # Match output of publish step
+    deploymentMethod: 'zipDeploy'
