@@ -15,15 +15,23 @@ steps:
   displayName: 'Run a one-line script'
 
 # Build and publish the .NET Core web project (customize for your environment if needed)
-
-# Deploy to Azure Web App
-- task: AzureWebApp@1
+- task: ArchiveFiles@2
   inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+# Deploy to Azure Web App
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
     azureSubscription: 'MCAPS-Support-REQ-75538-2024-pedromarques(b47f4b5c-a872-40c6-a011-01865fe9dd49)'
     appType: 'webApp'
-    appName: 'petedotnetwin'
+    WebAppName: 'petedotnetwin'
     deployToSlotOrASE: true
-    resourceGroupName: 'pete_apps_win'
-    slotName: 'test'
-    package: '$(Build.ArtifactStagingDirectory)/**/*.zip' # Match output of publish step
-    deploymentMethod: 'zipDeploy'
+    ResourceGroupName: 'pete_apps_win'
+    SlotName: 'test'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    enableCustomDeployment: true
+    DeploymentType: 'zipDeploy'
