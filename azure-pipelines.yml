@@ -22,6 +22,7 @@ steps:
     archiveType: 'zip'
     archiveFile: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
+
 # Deploy to Azure Web App
 - task: AzureRmWebAppDeployment@4
   inputs:
@@ -35,3 +36,6 @@ steps:
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     enableCustomDeployment: true
     DeploymentType: 'zipDeploy'
+    #swap
+    Action: 'Swap Slots'
+    SourceSlot: 'dev'
